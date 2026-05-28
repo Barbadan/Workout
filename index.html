@@ -832,12 +832,13 @@ function getExerciseIcon(name) {
     return `
       <svg class="exercise-icon" viewBox="0 0 48 48" aria-hidden="true">
         <circle class="accent-fill pulse" cx="24" cy="24" r="20"></circle>
-        <circle class="fill bounce" cx="24" cy="11" r="3"></circle>
-        <path class="stroke bounce" d="M24 14 L24 23"></path>
-        <path class="stroke bounce" d="M24 18 L15 20"></path>
-        <path class="stroke bounce" d="M24 18 L33 20"></path>
-        <path class="stroke bounce" d="M24 23 L15 30 L11 38"></path>
-        <path class="stroke bounce" d="M24 23 L33 30 L37 38"></path>
+        <path class="stroke" d="M12 38 L36 38" style="opacity:.25"></path>
+        <circle class="fill bounce" cx="24" cy="11" r="2.8"></circle>
+        <path class="stroke bounce" d="M24 14 L24 22"></path>
+        <path class="stroke bounce" d="M24 17 L17 20"></path>
+        <path class="stroke bounce" d="M24 17 L31 20"></path>
+        <path class="stroke bounce" d="M24 22 L17 30 L14 37"></path>
+        <path class="stroke bounce" d="M24 22 L31 30 L34 37" style="opacity:.45"></path>
       </svg>`;
   }
 
@@ -845,11 +846,12 @@ function getExerciseIcon(name) {
     return `
       <svg class="exercise-icon" viewBox="0 0 48 48" aria-hidden="true">
         <circle class="accent-fill pulse" cx="24" cy="24" r="20"></circle>
-        <circle class="fill push" cx="15" cy="20" r="3"></circle>
-        <path class="stroke push" d="M18 21 L27 21 L33 27 L39 27"></path>
-        <path class="stroke push" d="M27 21 L24 31"></path>
-        <path class="stroke push" d="M33 27 L31 36"></path>
-        <path class="stroke push" d="M22 27 L17 34"></path>
+        <path class="stroke" d="M11 36 L37 36" style="opacity:.25"></path>
+        <circle class="fill push" cx="14" cy="20" r="2.8"></circle>
+        <path class="stroke push" d="M17 20 L28 21 L36 26"></path>
+        <path class="stroke push" d="M23 22 L19 31" style="opacity:.45"></path>
+        <path class="stroke push" d="M29 21 L27 33"></path>
+        <path class="stroke push" d="M35 26 L38 35"></path>
       </svg>`;
   }
 
@@ -857,61 +859,56 @@ function getExerciseIcon(name) {
     return `
       <svg class="exercise-icon" viewBox="0 0 48 48" aria-hidden="true">
         <circle class="accent-fill pulse" cx="24" cy="24" r="20"></circle>
-        <circle class="fill bridge" cx="13" cy="30" r="3"></circle>
-        <path class="stroke bridge" d="M16 30 L23 24 L31 24 L38 31"></path>
-        <path class="stroke bridge" d="M31 24 L34 17"></path>
-        <path class="stroke bridge" d="M38 31 L40 37"></path>
+        <path class="stroke" d="M10 37 L38 37" style="opacity:.25"></path>
+        <circle class="fill bridge" cx="13" cy="30" r="2.8"></circle>
+        <path class="stroke bridge" d="M16 30 L24 24 L31 24"></path>
+        <path class="stroke bridge" d="M21 27 L18 22"></path>
+        <path class="stroke bridge" d="M30 24 L33 31 L35 37" style="opacity:.45"></path>
+        <path class="stroke bridge" d="M31 24 L37 30 L40 36"></path>
       </svg>`;
   }
 
-  if (lower.includes('side bends') || lower.includes('stretch')) {
+  if (lower.includes('side bends') || lower.includes('side bend')) {
     return `
       <svg class="exercise-icon" viewBox="0 0 48 48" aria-hidden="true">
         <circle class="accent-fill pulse" cx="24" cy="24" r="20"></circle>
-        <circle class="fill bend" cx="24" cy="10" r="3"></circle>
-        <path class="stroke bend" d="M24 13 L26 22 L22 30"></path>
-        <path class="stroke bend" d="M25 16 L33 10"></path>
-        <path class="stroke bend" d="M22 30 L18 38"></path>
-        <path class="stroke bend" d="M22 30 L27 38"></path>
+        <circle class="fill bend" cx="24" cy="10" r="2.8"></circle>
+        <path class="stroke bend" d="M24 13 Q29 22 23 31"></path>
+        <path class="stroke bend" d="M24 16 L33 9"></path>
+        <path class="stroke bend" d="M25 21 L18 24" style="opacity:.45"></path>
+        <path class="stroke bend" d="M23 31 L19 38"></path>
+        <path class="stroke bend" d="M23 31 L28 38"></path>
       </svg>`;
   }
 
   if (lower.includes('jumping jack')) {
     return `
       <svg class="exercise-icon" viewBox="0 0 48 48" aria-hidden="true">
-  <!-- Background ring element -->
-  <circle class="accent-fill pulse" cx="24" cy="24" r="20"></circle>
-  
-  <!-- Head -->
-  <circle class="fill push" cx="24" cy="11" r="2.5"></circle>
-  
-  <!-- Torso / Spine Base -->
-  <path class="stroke push" d="M24 13.5 L24 24"></path>
-  
-  <!-- Left Arm (Reaching up and out) -->
-  <path class="stroke push" d="M24 15.5 L17 11 L12 8"></path>
-  
-  <!-- Right Arm (Reaching up and out) -->
-  <path class="stroke push" d="M24 15.5 L31 11 L36 8"></path>
-  
-  <!-- Left Leg (Spread wide out) -->
-  <path class="stroke push" d="M24 24 L18 31 L14 38"></path>
-  
-  <!-- Right Leg (Spread wide out) -->
-  <path class="stroke push" d="M24 24 L30 31 L34 38"></path>
-</svg>
-`;
+        <circle class="accent-fill pulse" cx="24" cy="24" r="20"></circle>
+        <circle class="fill bounce" cx="24" cy="11" r="2.7"></circle>
+        <path class="stroke bounce" d="M24 14 L24 23"></path>
+        <g class="jack-arms">
+          <path class="stroke" d="M24 16 L17 11 L12 8"></path>
+          <path class="stroke" d="M24 16 L31 11 L36 8"></path>
+        </g>
+        <g class="jack-legs">
+          <path class="stroke" d="M24 23 L17 31 L13 38"></path>
+          <path class="stroke" d="M24 23 L31 31 L35 38" style="opacity:.45"></path>
+        </g>
+      </svg>`;
   }
 
   if (lower.includes('lunge')) {
     return `
       <svg class="exercise-icon" viewBox="0 0 48 48" aria-hidden="true">
         <circle class="accent-fill pulse" cx="24" cy="24" r="20"></circle>
-        <circle class="fill lunge" cx="26" cy="10" r="3"></circle>
-        <path class="stroke lunge" d="M26 13 L23 22 L15 27"></path>
-        <path class="stroke lunge" d="M23 18 L31 20"></path>
-        <path class="stroke lunge" d="M23 22 L30 30 L39 30"></path>
-        <path class="stroke lunge" d="M15 27 L11 37"></path>
+        <path class="stroke" d="M11 37 L39 37" style="opacity:.25"></path>
+        <circle class="fill lunge" cx="26" cy="10" r="2.8"></circle>
+        <path class="stroke lunge" d="M26 13 L25 20"></path>
+        <path class="stroke lunge" d="M26 15 L19 18"></path>
+        <path class="stroke lunge" d="M26 15 L32 18" style="opacity:.45"></path>
+        <path class="stroke lunge" d="M25 20 L31 28 L39 28"></path>
+        <path class="stroke lunge" d="M25 20 L18 27 L14 36" style="opacity:.45"></path>
       </svg>`;
   }
 
@@ -919,11 +916,12 @@ function getExerciseIcon(name) {
     return `
       <svg class="exercise-icon" viewBox="0 0 48 48" aria-hidden="true">
         <circle class="accent-fill pulse" cx="24" cy="24" r="20"></circle>
-        <circle class="fill" cx="18" cy="27" r="3"></circle>
-        <path class="stroke bug-arm" d="M20 26 L28 19"></path>
-        <path class="stroke" d="M20 26 L28 26"></path>
-        <path class="stroke bug-leg" d="M20 28 L29 35"></path>
-        <path class="stroke" d="M20 28 L13 35"></path>
+        <circle class="fill" cx="16" cy="25" r="2.8"></circle>
+        <path class="stroke" d="M19 25 L28 25"></path>
+        <path class="stroke bug-arm" d="M21 24 L30 18"></path>
+        <path class="stroke bug-arm" d="M21 24 L29 24" style="opacity:.45"></path>
+        <path class="stroke bug-leg" d="M21 26 L30 34"></path>
+        <path class="stroke bug-leg" d="M21 26 L13 34" style="opacity:.45"></path>
       </svg>`;
   }
 
@@ -931,10 +929,12 @@ function getExerciseIcon(name) {
     return `
       <svg class="exercise-icon" viewBox="0 0 48 48" aria-hidden="true">
         <circle class="accent-fill pulse" cx="24" cy="24" r="20"></circle>
-        <circle class="fill cow" cx="15" cy="19" r="2.5"></circle>
-        <path class="stroke cow" d="M18 20 C22 14, 30 14, 34 20"></path>
-        <path class="stroke cow" d="M20 20 L18 32"></path>
-        <path class="stroke cow" d="M30 20 L32 32"></path>
+        <path class="stroke" d="M10 35 L38 35" style="opacity:.2"></path>
+        <circle class="fill cow" cx="14" cy="20" r="2.6"></circle>
+        <path class="stroke cow" d="M17 20 C22 14, 30 14, 35 20"></path>
+        <path class="stroke cow" d="M21 21 L19 33"></path>
+        <path class="stroke cow" d="M30 21 L32 33" style="opacity:.45"></path>
+        <path class="stroke cow" d="M25 19 L27 13"></path>
       </svg>`;
   }
 
@@ -942,11 +942,11 @@ function getExerciseIcon(name) {
     return `
       <svg class="exercise-icon" viewBox="0 0 48 48" aria-hidden="true">
         <circle class="accent-fill pulse" cx="24" cy="24" r="20"></circle>
-        <circle class="fill bounce" cx="13" cy="24" r="2.8"></circle>
-        <path class="stroke bounce" d="M16 24 L24 20 L33 18"></path>
-        <path class="stroke bounce" d="M24 20 L28 28"></path>
-        <path class="stroke bounce" d="M23 21 L18 31"></path>
+        <circle class="fill bounce" cx="12" cy="24" r="2.7"></circle>
+        <path class="stroke bounce" d="M15 24 L24 20 L33 18"></path>
         <path class="stroke bounce" d="M33 18 L39 14"></path>
+        <path class="stroke bounce" d="M24 21 L19 31" style="opacity:.45"></path>
+        <path class="stroke bounce" d="M24 21 L29 29"></path>
       </svg>`;
   }
 
@@ -954,11 +954,12 @@ function getExerciseIcon(name) {
     return `
       <svg class="exercise-icon" viewBox="0 0 48 48" aria-hidden="true">
         <circle class="accent-fill pulse" cx="24" cy="24" r="20"></circle>
-        <circle class="fill" cx="17" cy="17" r="3"></circle>
-        <path class="stroke" d="M20 18 L28 21 L35 21"></path>
-        <path class="stroke climber-a" d="M28 21 L23 31"></path>
+        <path class="stroke" d="M11 36 L38 36" style="opacity:.2"></path>
+        <circle class="fill" cx="16" cy="17" r="2.8"></circle>
+        <path class="stroke" d="M19 18 L28 21 L35 21"></path>
+        <path class="stroke" d="M24 20 L20 29" style="opacity:.45"></path>
+        <path class="stroke climber-a" d="M28 21 L22 31"></path>
         <path class="stroke climber-b" d="M30 22 L36 33"></path>
-        <path class="stroke" d="M23 20 L19 29"></path>
       </svg>`;
   }
 
@@ -966,22 +967,25 @@ function getExerciseIcon(name) {
     return `
       <svg class="exercise-icon" viewBox="0 0 48 48" aria-hidden="true">
         <circle class="accent-fill pulse" cx="24" cy="24" r="20"></circle>
-        <circle class="fill breathe" cx="16" cy="26" r="3"></circle>
-        <path class="stroke breathe" d="M19 26 C23 22, 28 22, 34 27"></path>
-        <path class="stroke breathe" d="M24 27 L21 35"></path>
-        <path class="stroke breathe" d="M32 27 L35 34"></path>
+        <path class="stroke" d="M10 36 L38 36" style="opacity:.2"></path>
+        <circle class="fill breathe" cx="16" cy="27" r="2.8"></circle>
+        <path class="stroke breathe" d="M19 27 C24 22, 30 22, 35 27"></path>
+        <path class="stroke breathe" d="M20 28 L13 32"></path>
+        <path class="stroke breathe" d="M21 28 L14 35"></path>
+        <path class="stroke breathe" d="M29 27 L25 35"></path>
+        <path class="stroke breathe" d="M33 27 L35 34" style="opacity:.45"></path>
       </svg>`;
   }
 
   return `
     <svg class="exercise-icon" viewBox="0 0 48 48" aria-hidden="true">
       <circle class="accent-fill pulse" cx="24" cy="24" r="20"></circle>
-      <circle class="fill bounce" cx="24" cy="11" r="3"></circle>
-      <path class="stroke bounce" d="M24 14 L24 24"></path>
-      <path class="stroke bounce" d="M24 18 L16 22"></path>
-      <path class="stroke bounce" d="M24 18 L32 22"></path>
-      <path class="stroke bounce" d="M24 24 L18 36"></path>
-      <path class="stroke bounce" d="M24 24 L30 36"></path>
+      <circle class="fill bounce" cx="24" cy="11" r="2.8"></circle>
+      <path class="stroke bounce" d="M24 14 L24 23"></path>
+      <path class="stroke bounce" d="M24 18 L17 22"></path>
+      <path class="stroke bounce" d="M24 18 L31 22" style="opacity:.45"></path>
+      <path class="stroke bounce" d="M24 23 L19 36"></path>
+      <path class="stroke bounce" d="M24 23 L29 36" style="opacity:.45"></path>
     </svg>`;
 }
 
