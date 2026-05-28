@@ -273,6 +273,34 @@
   .exercise-icon .breathe {
     animation: breatheMove 2s ease-in-out infinite;
   }
+  .exercise-icon .march-body {
+    animation: marchBody 1.2s infinite ease-in-out;
+    transform-origin: 24px 25px;
+  }
+  .exercise-icon .march-left-leg {
+    animation: marchLeftLeg 1.2s infinite ease-in-out;
+    transform-origin: 24px 25px;
+  }
+  .exercise-icon .march-left-shin {
+    animation: marchLeftShin 1.2s infinite ease-in-out;
+    transform-origin: 20px 32px;
+  }
+  .exercise-icon .march-right-leg {
+    animation: marchRightLeg 1.2s infinite ease-in-out;
+    transform-origin: 24px 25px;
+  }
+  .exercise-icon .march-right-shin {
+    animation: marchRightShin 1.2s infinite ease-in-out;
+    transform-origin: 20px 32px;
+  }
+  .exercise-icon .march-left-arm {
+    animation: marchLeftArm 1.2s infinite ease-in-out;
+    transform-origin: 24px 16px;
+  }
+  .exercise-icon .march-right-arm {
+    animation: marchRightArm 1.2s infinite ease-in-out;
+    transform-origin: 24px 16px;
+  }
   .ex-body { flex: 1; }
   .ex-name {
     font-size: 15px; font-weight: 500; margin-bottom: 3px;
@@ -481,6 +509,34 @@
     0%, 100% { transform: scale(0.96); opacity: 0.85; }
     50% { transform: scale(1.05); opacity: 1; }
   }
+  @keyframes marchBody {
+    0%, 50%, 100% { transform: translateY(0px); }
+    25%, 75% { transform: translateY(-1px); }
+  }
+  @keyframes marchLeftLeg {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(-50deg); }
+  }
+  @keyframes marchLeftShin {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(70deg); }
+  }
+  @keyframes marchRightLeg {
+    0%, 100% { transform: rotate(-50deg); }
+    50% { transform: rotate(0deg); }
+  }
+  @keyframes marchRightShin {
+    0%, 100% { transform: rotate(70deg); }
+    50% { transform: rotate(0deg); }
+  }
+  @keyframes marchLeftArm {
+    0%, 100% { transform: rotate(-30deg); }
+    50% { transform: rotate(40deg); }
+  }
+  @keyframes marchRightArm {
+    0%, 100% { transform: rotate(40deg); }
+    50% { transform: rotate(-30deg); }
+  }
 
   /* DESKTOP BG */
   @media (min-width: 440px) {
@@ -656,12 +712,34 @@ function getExerciseIcon(name) {
   if (lower.includes('march') || lower.includes('high knees')) {
     return `
       <svg class="exercise-icon" viewBox="0 0 48 48" aria-hidden="true">
-        <circle class="accent-fill pulse" cx="24" cy="24" r="20"></circle>
-        <circle class="fill bounce" cx="24" cy="10" r="3"></circle>
-        <path class="stroke bounce" d="M24 14 L24 24 L17 31"></path>
-        <path class="stroke bounce" d="M24 18 L31 23"></path>
-        <path class="stroke bounce" d="M24 24 L31 31"></path>
-        <path class="stroke bounce" d="M24 24 L18 38"></path>
+        <circle class="accent-fill pulse" cx="24" cy="24" r="21"></circle>
+        <line x1="9" y1="40" x2="39" y2="40" stroke="rgba(182,245,66,0.2)" stroke-width="1.8" stroke-linecap="round"></line>
+        <g class="march-body">
+          <g class="march-left-arm">
+            <line class="stroke" x1="24" y1="16" x2="19.5" y2="23" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"></line>
+            <line class="stroke" x1="19.5" y1="23" x2="23" y2="29" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" opacity="0.55"></line>
+          </g>
+          <g class="march-left-leg">
+            <line class="stroke" x1="24" y1="25" x2="20" y2="32" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" opacity="0.65"></line>
+            <g class="march-left-shin">
+              <line class="stroke" x1="20" y1="32" x2="20" y2="39" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" opacity="0.65"></line>
+              <line class="stroke" x1="20" y1="39" x2="24.5" y2="39" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" opacity="0.65"></line>
+            </g>
+          </g>
+          <circle class="fill" cx="24" cy="9.5" r="3.3"></circle>
+          <line class="stroke" x1="24" y1="13.2" x2="24" y2="25" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"></line>
+          <g class="march-right-leg">
+            <line class="stroke" x1="24" y1="25" x2="20" y2="32" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"></line>
+            <g class="march-right-shin">
+              <line class="stroke" x1="20" y1="32" x2="20" y2="39" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"></line>
+              <line class="stroke" x1="20" y1="39" x2="24.5" y2="39" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"></line>
+            </g>
+          </g>
+          <g class="march-right-arm">
+            <line class="stroke" x1="24" y1="16" x2="19.5" y2="23" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"></line>
+            <line class="stroke" x1="19.5" y1="23" x2="23" y2="29" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"></line>
+          </g>
+        </g>
       </svg>`;
   }
 
