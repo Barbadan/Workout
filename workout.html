@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0d0f14">
+<meta name="description" content="Your personalized apartment workout plan">
+<title>FitHome — Workout Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0f14;
+    --bg2: #13161e;
+    --bg3: #1c2030;
+    --bg4: #252a3a;
+    --accent: #b6f542;
+    --accent2: #8fcf20;
+    --text: #f0f2f8;
+    --text2: #8b92a8;
+    --text3: #555d75;
+    --border: rgba(255,255,255,0.07);
+    --red: #ff5c5c;
+    --blue: #5b9bff;
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  html, body { height: 100%; background: var(--bg); }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100%;
+  }
+
+  #app {
+    width: 100%;
+    max-width: 420px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background: var(--bg);
+  }
+
+  /* TOP BAR */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 52px 20px 16px;
+    position: sticky;
+    top: 0;
+    background: linear-gradient(to bottom, var(--bg) 80%, transparent);
+    z-index: 10;
+  }
+  .topbar-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+  }
+  .topbar-logo span { color: var(--text2); font-weight: 400; }
+  .streak-pill {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text2);
+    cursor: default;
+  }
+  .streak-pill .flame { font-size: 14px; }
+  .streak-pill strong { color: var(--accent); }
+
+  /* SCROLL CONTENT */
+  .content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 16px 100px;
+  }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* TODAY TAB */
+  .today-header { margin-bottom: 20px; }
+  .today-greeting {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+  .today-greeting span { color: var(--accent); }
+  .today-sub { font-size: 14px; color: var(--text2); }
+
+  /* PROGRESS RING */
+  .progress-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .ring-wrap { position: relative; width: 72px; height: 72px; flex-shrink: 0; }
+  .ring-wrap svg { transform: rotate(-90deg); }
+  .ring-bg { fill: none; stroke: var(--bg4); stroke-width: 6; }
+  .ring-fg { fill: none; stroke: var(--accent); stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 0.5s ease; }
+  .ring-label {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px; font-weight: 700;
+  }
+  .prog-info .prog-title { font-size: 15px; font-weight: 500; margin-bottom: 4px; }
+  .prog-info .prog-sub { font-size: 13px; color: var(--text2); line-height: 1.5; }
+
+  /* WORKOUT SELECTOR */
+  .day-selector {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  .day-selector::-webkit-scrollbar { display: none; }
+  .day-btn {
+    flex-shrink: 0;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 7px 16px;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .day-btn:hover { border-color: var(--accent); color: var(--text); }
+  .day-btn.active { background: var(--accent); border-color: var(--accent); color: #0d0f14; font-weight: 500; }
+  .day-btn.done { border-color: var(--accent2); color: var(--accent2); }
+  .day-btn.done::after { content: ' ✓'; }
+
+  /* EXERCISE CARDS */
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 10px;
+  }
+  .ex-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .ex-card:active { transform: scale(0.99); }
+  .ex-card.checked { background: rgba(182,245,66,0.06); border-color: rgba(182,245,66,0.25); }
+  .ex-check {
+    width: 26px; height: 26px; border-radius: 50%;
+    border: 1.5px solid var(--bg4);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+    transition: all 0.2s;
+    font-size: 13px;
+  }
+  .ex-card.checked .ex-check { background: var(--accent); border-color: var(--accent); color: #0d0f14; }
+  .ex-body { flex: 1; }
+  .ex-name {
+    font-size: 15px; font-weight: 500; margin-bottom: 3px;
+    transition: color 0.15s;
+  }
+  .ex-card.checked .ex-name { color: var(--text2); text-decoration: line-through; text-decoration-color: var(--text3); }
+  .ex-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .ex-sets {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px; font-weight: 600;
+    color: var(--accent);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .ex-card.checked .ex-sets { color: var(--text3); }
+
+  .tip-banner {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.6;
+    margin-top: 6px;
+  }
+  .tip-banner strong { color: var(--accent); font-weight: 500; }
+
+  .rest-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px 20px;
+    text-align: center;
+  }
+  .rest-icon { font-size: 36px; margin-bottom: 10px; }
+  .rest-title { font-family: 'Barlow Condensed', sans-serif; font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+  .rest-sub { font-size: 14px; color: var(--text2); line-height: 1.6; }
+
+  .done-banner {
+    background: rgba(182,245,66,0.08);
+    border: 1px solid rgba(182,245,66,0.3);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--accent);
+    margin-top: 14px;
+    display: none;
+  }
+
+  /* WEEK TAB */
+  .week-day-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .week-day-card:hover { border-color: rgba(182,245,66,0.3); }
+  .wday-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px; font-weight: 700;
+    color: var(--text3);
+    min-width: 28px;
+    text-align: center;
+  }
+  .wday-num.workout { color: var(--accent); }
+  .wday-info { flex: 1; }
+  .wday-title { font-size: 15px; font-weight: 500; margin-bottom: 3px; }
+  .wday-meta { font-size: 12px; color: var(--text2); }
+  .wday-badge {
+    font-size: 11px; font-weight: 500;
+    padding: 4px 10px; border-radius: 20px;
+  }
+  .badge-go { background: rgba(182,245,66,0.12); color: var(--accent); }
+  .badge-rest { background: var(--bg3); color: var(--text3); }
+
+  /* TIPS TAB */
+  .tips-hero {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .tips-hero-icon { font-size: 32px; margin-bottom: 8px; }
+  .tips-hero-title { font-family: 'Barlow Condensed', sans-serif; font-size: 28px; font-weight: 700; margin-bottom: 6px; }
+  .tips-hero-sub { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+  .tip-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+    margin-bottom: 10px;
+  }
+  .tip-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .tip-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .tip-card-title { font-size: 14px; font-weight: 500; }
+  .tip-card-body { font-size: 13px; color: var(--text2); line-height: 1.7; padding-left: 18px; }
+
+  /* BOTTOM NAV */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 100%; max-width: 420px;
+    background: rgba(13,15,20,0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border);
+    display: flex;
+    padding: 10px 0 20px;
+    z-index: 100;
+  }
+  .nav-btn {
+    flex: 1;
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    background: none; border: none; cursor: pointer;
+    color: var(--text3);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px; font-weight: 500; letter-spacing: 0.03em;
+    padding: 4px 0;
+    transition: color 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav-btn.active { color: var(--accent); }
+  .nav-icon { font-size: 20px; line-height: 1; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .tab-content.active { animation: fadeUp 0.2s ease; }
+
+  @keyframes checkPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+  }
+  .pop { animation: checkPop 0.25s ease; }
+
+  /* DESKTOP BG */
+  @media (min-width: 440px) {
+    body { background: #080a0f; }
+    #app { box-shadow: 0 0 60px rgba(0,0,0,0.6); }
+    .bottom-nav { border-radius: 0; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-logo">Fit<span>Home</span></div>
+    <div class="streak-pill">
+      <span class="flame">🔥</span>
+      <strong id="streakNum">0</strong> day streak
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- TODAY TAB -->
+    <div class="tab-content active" id="tab-today">
+      <div class="today-header">
+        <div class="today-greeting" id="greeting">Good morning, <span>let's go!</span></div>
+        <div class="today-sub" id="todaySub">Loading your workout...</div>
+      </div>
+
+      <div class="progress-card">
+        <div class="ring-wrap">
+          <svg width="72" height="72" viewBox="0 0 72 72">
+            <circle class="ring-bg" cx="36" cy="36" r="30"/>
+            <circle class="ring-fg" id="ringFg" cx="36" cy="36" r="30"
+              stroke-dasharray="188.5"
+              stroke-dashoffset="188.5"/>
+          </svg>
+          <div class="ring-label" id="ringLabel">0%</div>
+        </div>
+        <div class="prog-info">
+          <div class="prog-title" id="progTitle">Today's workout</div>
+          <div class="prog-sub" id="progSub">Tap each exercise when done to track your progress.</div>
+        </div>
+      </div>
+
+      <div class="day-selector" id="daySelector"></div>
+
+      <div id="workoutArea"></div>
+      <div class="done-banner" id="doneBanner">🎉 Workout complete! Great job today.</div>
+    </div>
+
+    <!-- WEEK TAB -->
+    <div class="tab-content" id="tab-week">
+      <div class="today-header">
+        <div class="today-greeting">Your <span>week</span></div>
+        <div class="today-sub">3-day beginner plan · no equipment</div>
+      </div>
+      <div id="weekList"></div>
+    </div>
+
+    <!-- TIPS TAB -->
+    <div class="tab-content" id="tab-tips">
+      <div class="tips-hero">
+        <div class="tips-hero-icon">💡</div>
+        <div class="tips-hero-title">Beginner tips</div>
+        <div class="tips-hero-sub">Small habits that make the difference between quitting and succeeding.</div>
+      </div>
+      <div id="tipsList"></div>
+    </div>
+
+  </div><!-- /content -->
+
+  <nav class="bottom-nav">
+    <button class="nav-btn active" onclick="switchTab('today', this)">
+      <span class="nav-icon">⚡</span>Today
+    </button>
+    <button class="nav-btn" onclick="switchTab('week', this)">
+      <span class="nav-icon">📅</span>Week
+    </button>
+    <button class="nav-btn" onclick="switchTab('tips', this)">
+      <span class="nav-icon">💡</span>Tips
+    </button>
+  </nav>
+</div>
+
+<script>
+const DAYS = [
+  {
+    id: 0, label: "Day 1", title: "Full body A", type: "workout",
+    duration: "15–18 min",
+    tip: "Move at a pace that makes you slightly breathless but still able to talk. No rush.",
+    exercises: [
+      { name: "Marching in place", sets: "3 min", desc: "Warm-up — lift knees high, swing arms naturally" },
+      { name: "Bodyweight squats", sets: "3 × 10", desc: "Feet shoulder-width, lower until thighs are parallel, push through heels" },
+      { name: "Push-ups (on knees)", sets: "3 × 8", desc: "Keep core tight, lower chest to floor, fully extend" },
+      { name: "Glute bridges", sets: "3 × 12", desc: "Lie on back, feet flat, drive hips up and squeeze glutes" },
+      { name: "Side bends stretch", sets: "2 min", desc: "Cool-down — reach arm overhead and lean gently side to side" },
+    ]
+  },
+  { id: 1, label: "Day 2", title: "Rest / Walk", type: "rest", tip: "An easy 15–20 min walk counts as active recovery and boosts fat burn.", exercises: [] },
+  {
+    id: 2, label: "Day 3", title: "Full body B", type: "workout",
+    duration: "15–18 min",
+    tip: "Focus on control over speed — slow and steady reps burn more calories.",
+    exercises: [
+      { name: "Jumping jacks (slow)", sets: "3 min", desc: "Warm-up — step side to side if needed instead of jumping" },
+      { name: "Reverse lunges", sets: "3 × 8 ea.", desc: "Step back, lower back knee toward floor, keep front knee above ankle" },
+      { name: "Incline push-ups", sets: "3 × 10", desc: "Hands on table or sofa edge — easier on wrists, great for chest" },
+      { name: "Dead bugs", sets: "3 × 8 ea.", desc: "Lie on back, lower opposite arm & leg slowly, press low back down" },
+      { name: "Cat-cow stretch", sets: "1 min", desc: "Cool-down — on all fours, alternate arching and rounding your spine" },
+    ]
+  },
+  { id: 3, label: "Day 4", title: "Rest / Walk", type: "rest", tip: "Rest is when your body actually changes. Embrace it.", exercises: [] },
+  {
+    id: 4, label: "Day 5", title: "Full body C", type: "workout",
+    duration: "18–20 min",
+    tip: "This is your slightly longer session. Take rest between sets as needed.",
+    exercises: [
+      { name: "High knees (slow)", sets: "2 min", desc: "Warm-up — alternate lifting knees, keep core engaged" },
+      { name: "Sumo squats", sets: "3 × 12", desc: "Wide stance, toes angled out — targets inner thighs and glutes" },
+      { name: "Superman holds", sets: "3 × 10", desc: "Face down, lift arms and legs, hold 2 sec, lower slowly" },
+      { name: "Mountain climbers", sets: "3 × 10 ea.", desc: "From push-up position, alternate driving knees to chest — slow & controlled" },
+      { name: "Child's pose stretch", sets: "2 min", desc: "Cool-down — hold 20–30 seconds, breathe into your hips" },
+    ]
+  },
+  { id: 5, label: "Day 6", title: "Rest", type: "rest", tip: null, exercises: [] },
+  { id: 6, label: "Day 7", title: "Rest", type: "rest", tip: null, exercises: [] },
+];
+
+const TIPS = [
+  { title: "Consistency beats perfection", body: "Two sessions done is infinitely better than five sessions planned. Show up even when you don't feel like it — even if it's shorter." },
+  { title: "Progress before intensity", body: "As a beginner, your body will change from just showing up. Add reps or rounds only after 3–4 weeks when current sets feel easy." },
+  { title: "Rest is training too", body: "Fat loss and muscle building happen during recovery, not the workout. Skipping rest days slows your progress." },
+  { title: "Nutrition matters more than exercise", body: "You can't out-train a bad diet. Focus on eating enough protein and vegetables — you don't need to count calories to start seeing results." },
+  { title: "Walks are underrated", body: "A 20-minute daily walk adds up to 140 minutes of cardio per week with zero soreness or recovery needed. It's the most consistent calorie burner you can add." },
+  { title: "Sleep is your secret weapon", body: "Poor sleep raises hunger hormones and makes fat loss much harder. Aim for 7–8 hours — it's the highest-leverage health habit you have." },
+];
+
+let state = JSON.parse(localStorage.getItem('fithome_state') || '{}');
+let activeDay = state.activeDay ?? 0;
+let checked = state.checked ?? {};
+let streak = state.streak ?? 0;
+
+function save() {
+  localStorage.setItem('fithome_state', JSON.stringify({ activeDay, checked, streak }));
+}
+
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+
+function setGreeting() {
+  const h = new Date().getHours();
+  const g = h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
+  document.getElementById('greeting').innerHTML = `${g}, <span>let's go!</span>`;
+}
+
+function renderDaySelector() {
+  const sel = document.getElementById('daySelector');
+  sel.innerHTML = DAYS.map((d, i) => {
+    const isActive = i === activeDay;
+    const isDone = checked[i] && d.exercises.length > 0 &&
+      d.exercises.every((_, j) => checked[i][j]);
+    return `<button class="day-btn ${isActive ? 'active' : ''} ${isDone && !isActive ? 'done' : ''}"
+      onclick="selectDay(${i})">${d.label}</button>`;
+  }).join('');
+}
+
+function renderWorkout() {
+  const d = DAYS[activeDay];
+  const area = document.getElementById('workoutArea');
+  const banner = document.getElementById('doneBanner');
+  const sub = document.getElementById('todaySub');
+  sub.textContent = d.type === 'rest' ? 'Rest day — you\'ve earned it.' : `${d.title} · ${d.duration}`;
+
+  if (d.type === 'rest') {
+    banner.style.display = 'none';
+    area.innerHTML = `<div class="rest-card">
+      <div class="rest-icon">${d.label === 'Day 6' || d.label === 'Day 7' ? '😴' : '🚶'}</div>
+      <div class="rest-title">${d.title}</div>
+      <div class="rest-sub">${d.tip || 'Take it easy today. Your body is rebuilding.'}</div>
+    </div>`;
+    updateRing(0, 0);
+    return;
+  }
+
+  const dayChecked = checked[activeDay] || {};
+  const total = d.exercises.length;
+  const done = Object.keys(dayChecked).filter(k => dayChecked[k]).length;
+  updateRing(done, total);
+
+  const allDone = done === total;
+  banner.style.display = allDone ? 'block' : 'none';
+
+  area.innerHTML = `
+    <p class="section-label">${d.title} exercises</p>
+    ${d.exercises.map((ex, j) => {
+      const isChecked = !!dayChecked[j];
+      return `<div class="ex-card ${isChecked ? 'checked' : ''}" onclick="toggleEx(${j})" id="ex-${j}">
+        <div class="ex-check">${isChecked ? '✓' : ''}</div>
+        <div class="ex-body">
+          <div class="ex-name">${ex.name}</div>
+          <div class="ex-desc">${ex.desc}</div>
+        </div>
+        <div class="ex-sets">${ex.sets}</div>
+      </div>`;
+    }).join('')}
+    ${d.tip ? `<div class="tip-banner"><strong>Tip</strong> — ${d.tip}</div>` : ''}
+  `;
+}
+
+function updateRing(done, total) {
+  const pct = total === 0 ? 0 : Math.round((done / total) * 100);
+  const circ = 188.5;
+  const offset = circ - (circ * pct / 100);
+  document.getElementById('ringFg').style.strokeDashoffset = offset;
+  document.getElementById('ringLabel').textContent = pct + '%';
+  document.getElementById('progTitle').textContent = total === 0 ? 'Rest day' : `${done} of ${total} done`;
+  document.getElementById('progSub').textContent = total === 0
+    ? 'Active recovery helps your muscles rebuild.'
+    : done === total
+    ? '🎉 All exercises complete!'
+    : 'Tap each exercise when complete.';
+}
+
+function toggleEx(j) {
+  if (!checked[activeDay]) checked[activeDay] = {};
+  checked[activeDay][j] = !checked[activeDay][j];
+
+  const card = document.getElementById('ex-' + j);
+  card.classList.toggle('checked');
+  card.querySelector('.ex-check').textContent = checked[activeDay][j] ? '✓' : '';
+  card.querySelector('.ex-check').classList.add('pop');
+  setTimeout(() => card.querySelector('.ex-check').classList.remove('pop'), 250);
+
+  const d = DAYS[activeDay];
+  const total = d.exercises.length;
+  const done = Object.keys(checked[activeDay]).filter(k => checked[activeDay][k]).length;
+  updateRing(done, total);
+
+  const allDone = done === total;
+  document.getElementById('doneBanner').style.display = allDone ? 'block' : 'none';
+
+  if (allDone) {
+    streak = Math.max(streak, 1);
+    document.getElementById('streakNum').textContent = streak;
+  }
+  save();
+}
+
+function selectDay(i) {
+  activeDay = i;
+  save();
+  renderDaySelector();
+  renderWorkout();
+}
+
+function renderWeek() {
+  const list = document.getElementById('weekList');
+  list.innerHTML = DAYS.map((d, i) => {
+    const isDone = checked[i] && d.exercises.length > 0 &&
+      d.exercises.every((_, j) => checked[i][j]);
+    return `<div class="week-day-card" onclick="jumpToDay(${i})">
+      <div class="wday-num ${d.type === 'workout' ? 'workout' : ''}">${i + 1}</div>
+      <div class="wday-info">
+        <div class="wday-title">${d.title}${isDone ? ' ✓' : ''}</div>
+        <div class="wday-meta">${d.type === 'workout' ? (d.duration + ' · ' + d.exercises.length + ' exercises') : 'Active recovery'}</div>
+      </div>
+      <span class="wday-badge ${d.type === 'workout' ? 'badge-go' : 'badge-rest'}">${d.type === 'workout' ? 'Workout' : 'Rest'}</span>
+    </div>`;
+  }).join('');
+}
+
+function jumpToDay(i) {
+  activeDay = i;
+  save();
+  renderDaySelector();
+  renderWorkout();
+  switchTab('today', document.querySelector('.nav-btn'));
+  document.querySelectorAll('.nav-btn')[0].classList.add('active');
+}
+
+function renderTips() {
+  document.getElementById('tipsList').innerHTML = TIPS.map(t =>
+    `<div class="tip-card">
+      <div class="tip-card-header"><div class="tip-dot"></div><div class="tip-card-title">${t.title}</div></div>
+      <div class="tip-card-body">${t.body}</div>
+    </div>`
+  ).join('');
+}
+
+document.getElementById('streakNum').textContent = streak;
+setGreeting();
+renderDaySelector();
+renderWorkout();
+renderWeek();
+renderTips();
+</script>
+</body>
+</html>
