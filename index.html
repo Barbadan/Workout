@@ -190,6 +190,89 @@
     font-size: 13px;
   }
   .ex-card.checked .ex-check { background: var(--accent); border-color: var(--accent); color: #0d0f14; }
+  .ex-visual {
+    width: 58px;
+    height: 58px;
+    border-radius: 14px;
+    background: linear-gradient(180deg, rgba(182,245,66,0.08), rgba(91,155,255,0.05));
+    border: 1px solid rgba(182,245,66,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .ex-card.checked .ex-visual {
+    opacity: 0.7;
+    border-color: rgba(255,255,255,0.08);
+  }
+  .exercise-icon {
+    width: 42px;
+    height: 42px;
+    color: var(--accent);
+  }
+  .exercise-icon * {
+    vector-effect: non-scaling-stroke;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .exercise-icon .stroke {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .exercise-icon .fill {
+    fill: currentColor;
+    stroke: none;
+  }
+  .exercise-icon .accent-fill {
+    fill: rgba(182,245,66,0.16);
+    stroke: none;
+  }
+  .exercise-icon .pulse {
+    animation: pulseGlow 1.5s ease-in-out infinite;
+  }
+  .exercise-icon .bounce {
+    animation: bounceMove 1.2s ease-in-out infinite;
+  }
+  .exercise-icon .bend {
+    animation: bendMove 1.6s ease-in-out infinite;
+  }
+  .exercise-icon .push {
+    animation: pushMove 1.3s ease-in-out infinite;
+  }
+  .exercise-icon .bridge {
+    animation: bridgeMove 1.5s ease-in-out infinite;
+  }
+  .exercise-icon .jack-arms {
+    animation: jackArms 1.1s ease-in-out infinite;
+  }
+  .exercise-icon .jack-legs {
+    animation: jackLegs 1.1s ease-in-out infinite;
+  }
+  .exercise-icon .lunge {
+    animation: lungeMove 1.4s ease-in-out infinite;
+  }
+  .exercise-icon .bug-arm {
+    animation: bugArm 1.4s ease-in-out infinite alternate;
+  }
+  .exercise-icon .bug-leg {
+    animation: bugLeg 1.4s ease-in-out infinite alternate;
+  }
+  .exercise-icon .cow {
+    animation: cowMove 1.6s ease-in-out infinite alternate;
+  }
+  .exercise-icon .climber-a {
+    animation: climberA 1.1s ease-in-out infinite alternate;
+  }
+  .exercise-icon .climber-b {
+    animation: climberB 1.1s ease-in-out infinite alternate;
+  }
+  .exercise-icon .breathe {
+    animation: breatheMove 2s ease-in-out infinite;
+  }
   .ex-body { flex: 1; }
   .ex-name {
     font-size: 15px; font-weight: 500; margin-bottom: 3px;
@@ -341,6 +424,63 @@
     100% { transform: scale(1); }
   }
   .pop { animation: checkPop 0.25s ease; }
+
+  @keyframes pulseGlow {
+    0%, 100% { opacity: 0.45; transform: scale(0.92); }
+    50% { opacity: 0.9; transform: scale(1.04); }
+  }
+  @keyframes bounceMove {
+    0%, 100% { transform: translateY(2px); }
+    50% { transform: translateY(-4px); }
+  }
+  @keyframes bendMove {
+    0%, 100% { transform: rotate(-8deg) translateX(-1px); }
+    50% { transform: rotate(8deg) translateX(1px); }
+  }
+  @keyframes pushMove {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(4px); }
+  }
+  @keyframes bridgeMove {
+    0%, 100% { transform: translateY(2px) scaleY(0.96); }
+    50% { transform: translateY(-2px) scaleY(1.02); }
+  }
+  @keyframes jackArms {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(-28deg); }
+  }
+  @keyframes jackLegs {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(18deg); }
+  }
+  @keyframes lungeMove {
+    0%, 100% { transform: translateX(3px); }
+    50% { transform: translateX(-4px); }
+  }
+  @keyframes bugArm {
+    0% { transform: rotate(8deg); }
+    100% { transform: rotate(-18deg); }
+  }
+  @keyframes bugLeg {
+    0% { transform: rotate(-8deg); }
+    100% { transform: rotate(18deg); }
+  }
+  @keyframes cowMove {
+    0% { transform: scaleY(0.94) translateY(2px); }
+    100% { transform: scaleY(1.04) translateY(-1px); }
+  }
+  @keyframes climberA {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(-5px, 3px); }
+  }
+  @keyframes climberB {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(5px, -3px); }
+  }
+  @keyframes breatheMove {
+    0%, 100% { transform: scale(0.96); opacity: 0.85; }
+    50% { transform: scale(1.05); opacity: 1; }
+  }
 
   /* DESKTOP BG */
   @media (min-width: 440px) {
@@ -500,6 +640,174 @@ function setGreeting() {
   document.getElementById('greeting').innerHTML = `${g}, <span>let's go!</span>`;
 }
 
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, ch => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }[ch]));
+}
+
+function getExerciseIcon(name) {
+  const lower = name.toLowerCase();
+
+  if (lower.includes('march') || lower.includes('high knees')) {
+    return `
+      <svg class="exercise-icon" viewBox="0 0 48 48" aria-hidden="true">
+        <circle class="accent-fill pulse" cx="24" cy="24" r="20"></circle>
+        <circle class="fill bounce" cx="24" cy="10" r="3"></circle>
+        <path class="stroke bounce" d="M24 14 L24 24 L17 31"></path>
+        <path class="stroke bounce" d="M24 18 L31 23"></path>
+        <path class="stroke bounce" d="M24 24 L31 31"></path>
+        <path class="stroke bounce" d="M24 24 L18 38"></path>
+      </svg>`;
+  }
+
+  if (lower.includes('sumo squat') || lower.includes('squat')) {
+    return `
+      <svg class="exercise-icon" viewBox="0 0 48 48" aria-hidden="true">
+        <circle class="accent-fill pulse" cx="24" cy="24" r="20"></circle>
+        <circle class="fill bounce" cx="24" cy="11" r="3"></circle>
+        <path class="stroke bounce" d="M24 14 L24 23"></path>
+        <path class="stroke bounce" d="M24 18 L15 20"></path>
+        <path class="stroke bounce" d="M24 18 L33 20"></path>
+        <path class="stroke bounce" d="M24 23 L15 30 L11 38"></path>
+        <path class="stroke bounce" d="M24 23 L33 30 L37 38"></path>
+      </svg>`;
+  }
+
+  if (lower.includes('push-up')) {
+    return `
+      <svg class="exercise-icon" viewBox="0 0 48 48" aria-hidden="true">
+        <circle class="accent-fill pulse" cx="24" cy="24" r="20"></circle>
+        <circle class="fill push" cx="15" cy="20" r="3"></circle>
+        <path class="stroke push" d="M18 21 L27 21 L33 27 L39 27"></path>
+        <path class="stroke push" d="M27 21 L24 31"></path>
+        <path class="stroke push" d="M33 27 L31 36"></path>
+        <path class="stroke push" d="M22 27 L17 34"></path>
+      </svg>`;
+  }
+
+  if (lower.includes('glute bridge')) {
+    return `
+      <svg class="exercise-icon" viewBox="0 0 48 48" aria-hidden="true">
+        <circle class="accent-fill pulse" cx="24" cy="24" r="20"></circle>
+        <circle class="fill bridge" cx="13" cy="30" r="3"></circle>
+        <path class="stroke bridge" d="M16 30 L23 24 L31 24 L38 31"></path>
+        <path class="stroke bridge" d="M31 24 L34 17"></path>
+        <path class="stroke bridge" d="M38 31 L40 37"></path>
+      </svg>`;
+  }
+
+  if (lower.includes('side bends') || lower.includes('stretch')) {
+    return `
+      <svg class="exercise-icon" viewBox="0 0 48 48" aria-hidden="true">
+        <circle class="accent-fill pulse" cx="24" cy="24" r="20"></circle>
+        <circle class="fill bend" cx="24" cy="10" r="3"></circle>
+        <path class="stroke bend" d="M24 13 L26 22 L22 30"></path>
+        <path class="stroke bend" d="M25 16 L33 10"></path>
+        <path class="stroke bend" d="M22 30 L18 38"></path>
+        <path class="stroke bend" d="M22 30 L27 38"></path>
+      </svg>`;
+  }
+
+  if (lower.includes('jumping jack')) {
+    return `
+      <svg class="exercise-icon" viewBox="0 0 48 48" aria-hidden="true">
+        <circle class="accent-fill pulse" cx="24" cy="24" r="20"></circle>
+        <circle class="fill" cx="24" cy="10" r="3"></circle>
+        <path class="stroke jack-arms" d="M24 14 L16 7"></path>
+        <path class="stroke jack-arms" d="M24 14 L32 7"></path>
+        <path class="stroke" d="M24 14 L24 25"></path>
+        <path class="stroke jack-legs" d="M24 25 L16 38"></path>
+        <path class="stroke jack-legs" d="M24 25 L32 38"></path>
+      </svg>`;
+  }
+
+  if (lower.includes('lunge')) {
+    return `
+      <svg class="exercise-icon" viewBox="0 0 48 48" aria-hidden="true">
+        <circle class="accent-fill pulse" cx="24" cy="24" r="20"></circle>
+        <circle class="fill lunge" cx="26" cy="10" r="3"></circle>
+        <path class="stroke lunge" d="M26 13 L23 22 L15 27"></path>
+        <path class="stroke lunge" d="M23 18 L31 20"></path>
+        <path class="stroke lunge" d="M23 22 L30 30 L39 30"></path>
+        <path class="stroke lunge" d="M15 27 L11 37"></path>
+      </svg>`;
+  }
+
+  if (lower.includes('dead bug')) {
+    return `
+      <svg class="exercise-icon" viewBox="0 0 48 48" aria-hidden="true">
+        <circle class="accent-fill pulse" cx="24" cy="24" r="20"></circle>
+        <circle class="fill" cx="18" cy="27" r="3"></circle>
+        <path class="stroke bug-arm" d="M20 26 L28 19"></path>
+        <path class="stroke" d="M20 26 L28 26"></path>
+        <path class="stroke bug-leg" d="M20 28 L29 35"></path>
+        <path class="stroke" d="M20 28 L13 35"></path>
+      </svg>`;
+  }
+
+  if (lower.includes('cat-cow')) {
+    return `
+      <svg class="exercise-icon" viewBox="0 0 48 48" aria-hidden="true">
+        <circle class="accent-fill pulse" cx="24" cy="24" r="20"></circle>
+        <circle class="fill cow" cx="15" cy="19" r="2.5"></circle>
+        <path class="stroke cow" d="M18 20 C22 14, 30 14, 34 20"></path>
+        <path class="stroke cow" d="M20 20 L18 32"></path>
+        <path class="stroke cow" d="M30 20 L32 32"></path>
+      </svg>`;
+  }
+
+  if (lower.includes('superman')) {
+    return `
+      <svg class="exercise-icon" viewBox="0 0 48 48" aria-hidden="true">
+        <circle class="accent-fill pulse" cx="24" cy="24" r="20"></circle>
+        <circle class="fill bounce" cx="13" cy="24" r="2.8"></circle>
+        <path class="stroke bounce" d="M16 24 L24 20 L33 18"></path>
+        <path class="stroke bounce" d="M24 20 L28 28"></path>
+        <path class="stroke bounce" d="M23 21 L18 31"></path>
+        <path class="stroke bounce" d="M33 18 L39 14"></path>
+      </svg>`;
+  }
+
+  if (lower.includes('mountain climber')) {
+    return `
+      <svg class="exercise-icon" viewBox="0 0 48 48" aria-hidden="true">
+        <circle class="accent-fill pulse" cx="24" cy="24" r="20"></circle>
+        <circle class="fill" cx="17" cy="17" r="3"></circle>
+        <path class="stroke" d="M20 18 L28 21 L35 21"></path>
+        <path class="stroke climber-a" d="M28 21 L23 31"></path>
+        <path class="stroke climber-b" d="M30 22 L36 33"></path>
+        <path class="stroke" d="M23 20 L19 29"></path>
+      </svg>`;
+  }
+
+  if (lower.includes("child's pose")) {
+    return `
+      <svg class="exercise-icon" viewBox="0 0 48 48" aria-hidden="true">
+        <circle class="accent-fill pulse" cx="24" cy="24" r="20"></circle>
+        <circle class="fill breathe" cx="16" cy="26" r="3"></circle>
+        <path class="stroke breathe" d="M19 26 C23 22, 28 22, 34 27"></path>
+        <path class="stroke breathe" d="M24 27 L21 35"></path>
+        <path class="stroke breathe" d="M32 27 L35 34"></path>
+      </svg>`;
+  }
+
+  return `
+    <svg class="exercise-icon" viewBox="0 0 48 48" aria-hidden="true">
+      <circle class="accent-fill pulse" cx="24" cy="24" r="20"></circle>
+      <circle class="fill bounce" cx="24" cy="11" r="3"></circle>
+      <path class="stroke bounce" d="M24 14 L24 24"></path>
+      <path class="stroke bounce" d="M24 18 L16 22"></path>
+      <path class="stroke bounce" d="M24 18 L32 22"></path>
+      <path class="stroke bounce" d="M24 24 L18 36"></path>
+      <path class="stroke bounce" d="M24 24 L30 36"></path>
+    </svg>`;
+}
+
 function renderDaySelector() {
   const sel = document.getElementById('daySelector');
   sel.innerHTML = DAYS.map((d, i) => {
@@ -543,14 +851,15 @@ function renderWorkout() {
       const isChecked = !!dayChecked[j];
       return `<div class="ex-card ${isChecked ? 'checked' : ''}" onclick="toggleEx(${j})" id="ex-${j}">
         <div class="ex-check">${isChecked ? '✓' : ''}</div>
+        <div class="ex-visual" aria-hidden="true">${getExerciseIcon(ex.name)}</div>
         <div class="ex-body">
-          <div class="ex-name">${ex.name}</div>
-          <div class="ex-desc">${ex.desc}</div>
+          <div class="ex-name">${escapeHtml(ex.name)}</div>
+          <div class="ex-desc">${escapeHtml(ex.desc)}</div>
         </div>
-        <div class="ex-sets">${ex.sets}</div>
+        <div class="ex-sets">${escapeHtml(ex.sets)}</div>
       </div>`;
     }).join('')}
-    ${d.tip ? `<div class="tip-banner"><strong>Tip</strong> — ${d.tip}</div>` : ''}
+    ${d.tip ? `<div class="tip-banner"><strong>Tip</strong> — ${escapeHtml(d.tip)}</div>` : ''}
   `;
 }
 
@@ -628,8 +937,8 @@ function jumpToDay(i) {
 function renderTips() {
   document.getElementById('tipsList').innerHTML = TIPS.map(t =>
     `<div class="tip-card">
-      <div class="tip-card-header"><div class="tip-dot"></div><div class="tip-card-title">${t.title}</div></div>
-      <div class="tip-card-body">${t.body}</div>
+      <div class="tip-card-header"><div class="tip-dot"></div><div class="tip-card-title">${escapeHtml(t.title)}</div></div>
+      <div class="tip-card-body">${escapeHtml(t.body)}</div>
     </div>`
   ).join('');
 }
