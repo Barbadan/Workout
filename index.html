@@ -690,6 +690,25 @@ function getWeekKey(date = new Date()) {
   return d.toISOString().slice(0, 10);
 }
 
+function getDayIndex(date = new Date()) {
+  const d = new Date(date);
+  return (d.getDay() + 6) % 7;
+}
+
+function syncRestDays() {
+  const todayIndex = getDayIndex();
+  let changed = false;
+  for (let dayIndex = 0; dayIndex <= todayIndex && dayIndex < DAYS.length; dayIndex++) {
+    if (DAYS[dayIndex].type !== 'rest') continue;
+    const completionKey = `${weekKey}-${dayIndex}`;
+    if (!completed[completionKey]) {
+      completed[completionKey] = true;
+      changed = true;
+    }
+  }
+  return changed;
+}
+
 if (!state.completed && Object.keys(checked).length > 0) {
   for (let dayIndex = 0; dayIndex < DAYS.length; dayIndex++) {
     const day = DAYS[dayIndex];
@@ -707,6 +726,7 @@ if (weekKey !== currentWeekKey) {
   activeDay = 0;
   stateChanged = true;
 }
+if (syncRestDays()) stateChanged = true;
 
 function save() {
   localStorage.setItem('fithome_state', JSON.stringify({ activeDay, checked, streak, weekKey, completed }));
