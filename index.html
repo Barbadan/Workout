@@ -679,19 +679,18 @@ let activeDay = state.activeDay ?? 0;
 let checked = state.checked ?? {};
 let streak = state.streak ?? 0;
 
-if (state.activeDay !== undefined) {
-  syncStreak(state.activeDay);
-}
-
 function save() {
   localStorage.setItem('fithome_state', JSON.stringify({ activeDay, checked, streak }));
 }
 
-function syncStreak(dayIndex = activeDay, shouldSave = true) {
-  streak = Math.max(streak, dayIndex + 1);
+function syncStreak() {
+  streak = DAYS.reduce((count, day, dayIndex) => {
+    const isComplete = day.exercises.length > 0 &&
+      day.exercises.every((_, exerciseIndex) => checked[dayIndex]?.[exerciseIndex]);
+    return count + (isComplete ? 1 : 0);
+  }, 0);
   const streakNum = document.getElementById('streakNum');
   if (streakNum) streakNum.textContent = streak;
-  if (shouldSave) save();
 }
 
 function switchTab(name, btn) {
@@ -1087,15 +1086,13 @@ function toggleEx(j) {
   const allDone = done === total;
   document.getElementById('doneBanner').style.display = allDone ? 'block' : 'none';
 
-  if (allDone) {
-    syncStreak(activeDay, false);
-  }
+  syncStreak();
   save();
 }
 
 function selectDay(i) {
   activeDay = i;
-  syncStreak(i);
+  save();
   renderDaySelector();
   renderWorkout();
 }
@@ -1118,7 +1115,7 @@ function renderWeek() {
 
 function jumpToDay(i) {
   activeDay = i;
-  syncStreak(i);
+  save();
   renderDaySelector();
   renderWorkout();
   switchTab('today', document.querySelector('.nav-btn'));
@@ -1134,7 +1131,8 @@ function renderTips() {
   ).join('');
 }
 
-document.getElementById('streakNum').textContent = streak;
+syncStreak();
+save();
 setGreeting();
 renderDaySelector();
 renderWorkout();
