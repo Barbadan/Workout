@@ -1131,8 +1131,9 @@ function renderTips() {
   ).join('');
 }
 
+const storedStreak = streak;
 syncStreak();
-save();
+if (streak !== storedStreak) save();
 setGreeting();
 renderDaySelector();
 renderWorkout();
