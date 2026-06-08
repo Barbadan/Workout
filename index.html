@@ -697,8 +697,9 @@ function getDayIndex(date = new Date()) {
 
 function syncRestDays() {
   const todayIndex = getDayIndex();
+  const endIndex = Math.min(Math.max(todayIndex, 0), DAYS.length - 1);
   let changed = false;
-  for (let dayIndex = 0; dayIndex <= todayIndex && dayIndex < DAYS.length; dayIndex++) {
+  for (let dayIndex = 0; dayIndex <= endIndex; dayIndex++) {
     if (DAYS[dayIndex].type !== 'rest') continue;
     const completionKey = `${weekKey}-${dayIndex}`;
     if (!completed[completionKey]) {
