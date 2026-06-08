@@ -680,7 +680,7 @@ let checked = state.checked ?? {};
 let streak = state.streak ?? 0;
 
 if (state.activeDay !== undefined) {
-  streak = Math.max(streak, activeDay + 1);
+  streak = Math.max(streak, state.activeDay + 1);
 }
 
 function save() {
