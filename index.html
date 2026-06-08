@@ -684,11 +684,14 @@ function save() {
 }
 
 function syncStreak() {
-  streak = DAYS.reduce((count, day, dayIndex) => {
+  streak = 0;
+  for (let dayIndex = 0; dayIndex < DAYS.length; dayIndex++) {
+    const day = DAYS[dayIndex];
     const isComplete = day.exercises.length > 0 &&
       day.exercises.every((_, exerciseIndex) => checked[dayIndex]?.[exerciseIndex]);
-    return count + (isComplete ? 1 : 0);
-  }, 0);
+    if (day.exercises.length > 0 && !isComplete) break;
+    if (isComplete) streak++;
+  }
   const streakNum = document.getElementById('streakNum');
   if (streakNum) streakNum.textContent = streak;
 }
