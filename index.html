@@ -680,7 +680,7 @@ let checked = state.checked ?? {};
 let streak = state.streak ?? 0;
 
 if (state.activeDay !== undefined) {
-  streak = Math.max(streak, state.activeDay + 1);
+  syncStreak(state.activeDay);
 }
 
 function save() {
@@ -689,7 +689,8 @@ function save() {
 
 function syncStreak(dayIndex = activeDay) {
   streak = Math.max(streak, dayIndex + 1);
-  document.getElementById('streakNum').textContent = streak;
+  const streakNum = document.getElementById('streakNum');
+  if (streakNum) streakNum.textContent = streak;
 }
 
 function switchTab(name, btn) {
