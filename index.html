@@ -687,10 +687,11 @@ function save() {
   localStorage.setItem('fithome_state', JSON.stringify({ activeDay, checked, streak }));
 }
 
-function syncStreak(dayIndex = activeDay) {
+function syncStreak(dayIndex = activeDay, shouldSave = true) {
   streak = Math.max(streak, dayIndex + 1);
   const streakNum = document.getElementById('streakNum');
   if (streakNum) streakNum.textContent = streak;
+  if (shouldSave) save();
 }
 
 function switchTab(name, btn) {
@@ -1087,7 +1088,7 @@ function toggleEx(j) {
   document.getElementById('doneBanner').style.display = allDone ? 'block' : 'none';
 
   if (allDone) {
-    syncStreak();
+    syncStreak(activeDay, false);
   }
   save();
 }
@@ -1095,7 +1096,6 @@ function toggleEx(j) {
 function selectDay(i) {
   activeDay = i;
   syncStreak(i);
-  save();
   renderDaySelector();
   renderWorkout();
 }
@@ -1119,7 +1119,6 @@ function renderWeek() {
 function jumpToDay(i) {
   activeDay = i;
   syncStreak(i);
-  save();
   renderDaySelector();
   renderWorkout();
   switchTab('today', document.querySelector('.nav-btn'));
